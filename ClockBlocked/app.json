@@ -2,22 +2,33 @@
   "expo": {
     "name": "ClockBlocked",
     "slug": "clockblocked",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "clockblocked",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.xapollon430.ClockBlocked"
+      "bundleIdentifier": "com.xapollon430.ClockBlocked",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.xapollon430.ClockBlocked",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -34,10 +45,44 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "ios": {
+            "backgroundMode": false
+          },
+          "sounds": ["./assets/sounds/alarm.wav"]
+        }
+      ],
+      "expo-audio",
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow ClockBlocked to access the microphone for alarm verification",
+          "speechRecognitionPermission": "Allow ClockBlocked to recognize your voice for alarm verification"
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "238fb21a-f414-45ef-8882-a869a3b2d13f"
+      }
+    },
+    "owner": "xapollon430-2"
   }
 }

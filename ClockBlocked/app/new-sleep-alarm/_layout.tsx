@@ -3,7 +3,7 @@ import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
-export default function TabLayout() {
+export default function NewSleepAlarmLayout() {
   const router = useRouter();
 
   return (
@@ -11,13 +11,13 @@ export default function TabLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerTitle: "New Sleep Alarm",
+          headerTitle: "New Alarm",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
-              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              style={styles.backButton}
             >
-              <IconSymbol name="chevron.left" size={28} color="white" />
+              <IconSymbol name="chevron.left" size={30} color="white" />
             </TouchableOpacity>
           ),
         }}
@@ -26,4 +26,8 @@ export default function TabLayout() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  backButton: {
+    paddingLeft: 2,
+  },
+});

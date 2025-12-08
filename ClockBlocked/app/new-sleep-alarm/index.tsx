@@ -1,25 +1,30 @@
-import { StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
+import { useRouter } from "expo-router";
 import { TimerPicker } from "react-native-timer-picker";
 import { LinearGradient } from "expo-linear-gradient";
-
-const DAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+import { Button } from "@/components/Button";
+import { DAYS } from "@/constants";
+import { useStore } from "@/store/useStore";
+import { createAlarm } from "@/services/alarmService";
 
 export default function NewSleepAlarmScreen() {
+  const router = useRouter();
+  const { user } = useStore();
+
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
-  const [alarm, setAlarm] = useState<{ hours: number; minutes: number }>({
-    hours: 7,
-    minutes: 0,
+  const [alarm, setAlarm] = useState({
+    hours: 8,
+    minutes: 22,
   });
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleDay = (idx: number) => {
     setSelectedDays((prev) =>
@@ -27,103 +32,154 @@ export default function NewSleepAlarmScreen() {
     );
   };
 
+  const handleSaveAlarm = async () => {
+    if (selectedDays.length === 0) {
+      Alert.alert("Error", "Please select at least one day for the alarm");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await createAlarm(user.uid, alarm.hours, alarm.minutes, selectedDays);
+      Alert.alert("Success", "Alarm created successfully!", [
+        {
+          text: "OK",
+          onPress: () => router.back(),
+        },
+      ]);
+    } catch (error) {
+      console.error("Error saving alarm:", error);
+      Alert.alert("Error", "Failed to create alarm. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.alarmStatus}>Time</Text>
-      <View style={styles.centeredView}>
-        <TimerPicker
-          hours={alarm.hours}
-          minutes={alarm.minutes}
-          onChange={(picked) =>
-            setAlarm({ hours: picked.hours, minutes: picked.minutes })
-          }
-          hideSeconds
-          padWithNItems={2}
-          use12HourPicker
-          minuteLabel=""
-          styles={styles.alarm}
-          LinearGradient={LinearGradient}
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.timeSection}>
+          <Text style={styles.sectionTitle}>Set Time</Text>
+          <View style={styles.pickerWrapper}>
+            <TimerPicker
+              initialValue={{
+                hours: alarm.hours,
+                minutes: alarm.minutes,
+              }}
+              onDurationChange={(picked) => {
+                setAlarm({ hours: picked.hours, minutes: picked.minutes });
+              }}
+              hideSeconds
+              padWithNItems={2}
+              use12HourPicker
+              minuteLabel=""
+              styles={styles.alarm}
+              LinearGradient={LinearGradient}
+            />
+          </View>
+        </View>
+
+        <View style={styles.daysSection}>
+          <Text style={styles.sectionTitle}>Repeat</Text>
+          <View style={styles.daysGrid}>
+            {DAYS.map((day, idx) => (
+              <TouchableOpacity
+                key={day}
+                onPress={() => toggleDay(idx)}
+                style={[
+                  styles.dayButton,
+                  selectedDays.includes(idx) && styles.dayButtonSelected,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.dayButtonText,
+                    selectedDays.includes(idx) && styles.dayButtonTextSelected,
+                  ]}
+                >
+                  {day}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <Button
+          title="Save Alarm"
+          onPress={handleSaveAlarm}
+          disabled={isSaving}
+          loading={isSaving}
+          loadingText="Saving..."
+          style={styles.saveButton}
         />
       </View>
-      <Text style={styles.repeatLabel}>Repeat On</Text>
-      <View style={styles.daysRow}>
-        {DAYS.map((day, idx) => (
-          <TouchableOpacity
-            key={day}
-            onPress={() => toggleDay(idx)}
-            style={[
-              styles.dayButton,
-              selectedDays.includes(idx) && styles.dayButtonSelected,
-            ]}
-          >
-            <Text
-              style={[
-                styles.dayButtonText,
-                selectedDays.includes(idx) && styles.dayButtonTextSelected,
-              ]}
-            >
-              {day}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgb(28,30,33)",
     flex: 1,
-    alignItems: "center",
+    backgroundColor: "#000",
   },
-  alarmStatus: {
-    marginVertical: 24,
-    fontSize: 24,
-    color: "#F1F1F1",
+  content: {
+    flex: 1,
+    padding: 20,
   },
-  centeredView: {
+  timeSection: {
+    marginTop: 20,
+    marginBottom: 40,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#FFF",
+    marginBottom: 20,
+  },
+  pickerWrapper: {
+    backgroundColor: "#1C1C1E",
+    borderRadius: 20,
+    padding: 10,
     alignItems: "center",
   },
   alarm: {
-    backgroundColor: "rgb(28,30,33)",
+    backgroundColor: "#1C1C1E",
     text: {
       color: "white",
     },
-    pickerContainer: {
-      width: 150,
-    },
   },
-
-  repeatLabel: {
-    fontSize: 18,
-    marginVertical: 24,
-    color: "#F1F1F1",
+  daysSection: {
+    marginBottom: 40,
   },
-  daysRow: {
-    display: "flex",
+  daysGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 5,
-    width: 200,
+    justifyContent: "center",
   },
   dayButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginHorizontal: 4,
-    borderRadius: 20,
-    backgroundColor: "#E0E0E0",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#1C1C1E",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#1C1C1E",
   },
   dayButtonSelected: {
-    backgroundColor: "#6C63FF",
+    backgroundColor: "#007AFF",
+    borderColor: "#007AFF",
   },
   dayButtonText: {
-    color: "#333",
-    fontWeight: "bold",
+    color: "#666",
+    fontWeight: "600",
+    fontSize: 14,
   },
   dayButtonTextSelected: {
-    color: "#fff",
+    color: "#FFF",
   },
-  selectedDaysText: {
-    fontSize: 16,
-    color: "#888",
+  saveButton: {
+    marginTop: "auto",
   },
 });

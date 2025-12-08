@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "213976273353",
+    "project_id": "clockblocked-f403c",
+    "storage_bucket": "clockblocked-f403c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213976273353:android:293d0e5a6339668cad9818",
+        "android_client_info": {
+          "package_name": "com.xapollon430.ClockBlocked"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213976273353-ioajf2p318slnnmqpb1m3g1rc6lq6hvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACpNhk7vLaEOSYz3L98auVViNi8OR05SM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213976273353-ioajf2p318slnnmqpb1m3g1rc6lq6hvu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "213976273353-4bq4jhufnsminvs24rvgfu0b6une6h72.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.xapollon430.ClockBlocked"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

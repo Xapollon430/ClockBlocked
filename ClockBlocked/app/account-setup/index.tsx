@@ -4,48 +4,37 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Modal,
+  Dimensions,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
+import { useTypewriter } from "../../hooks/useTypewriter";
+import { STORY_TEXTS, QUESTIONS } from "../../constants";
+import { useStore } from "../../store/useStore";
+import { signInWithGoogle } from "../../firebase/auth";
 
-const texts = [
-  "",
-  // Step 1: Hugo's Problem
-  "In 1830, Victor Hugo was hopelessly behind on his novel. Deadlines loomed, but he kept procrastinating.",
-  // Step 2: The Commitment Device
-  "Desperate, Hugo instructed his servant to lock him in a freezing cold room with no clothes. No way out—if he didn't write, he stayed trapped in the bitter cold.",
-  // Step 3: The Result & Bridge to Product
-  "With real consequences, Hugo finished The Hunchback of Notre Dame ahead of schedule. ClockBlocked brings that same power to your life. Ready to commit?",
-];
-
-const questions = [
-  {
-    text: "Are you a dog person?",
-    id: "pets",
-  },
-  {
-    text: "Do you prefer summer over winter?",
-    id: "seasons",
-  },
-  {
-    text: "Are you a morning person?",
-    id: "morning",
-  },
-  {
-    text: "Do you prefer coffee over tea?",
-    id: "drinks",
-  },
-];
+const { width: screenWidth } = Dimensions.get("window");
 
 export default function AccountSetup() {
   const [storyIndex, setStoryIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(-1);
   const [showingQuestions, setShowingQuestions] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
   const [answers, setAnswers] = useState({});
 
+  const { isLoading, setLoading, setUser } = useStore();
+
+  let textToDisplay = "";
+  if (!showingQuestions) {
+    textToDisplay = STORY_TEXTS[storyIndex];
+  } else if (!showSignIn) {
+    textToDisplay = QUESTIONS[questionIndex]?.text;
+  }
+
+  const { displayedText, isTyping } = useTypewriter(textToDisplay);
+
   const handleStoryNext = () => {
-    if (storyIndex < texts.length - 1) {
+    if (storyIndex < STORY_TEXTS.length - 1) {
       setStoryIndex((prev) => prev + 1);
     } else {
       setShowingQuestions(true);
@@ -56,19 +45,31 @@ export default function AccountSetup() {
   const handleAnswer = (answer: boolean) => {
     setAnswers((prev: Record<string, boolean>) => ({
       ...prev,
-      [questions[questionIndex].id]: answer,
+      [QUESTIONS[questionIndex].id]: answer,
     }));
 
-    if (questionIndex === questions.length - 1) {
-      setShowLoginModal(true);
+    if (questionIndex === QUESTIONS.length - 1) {
+      setShowSignIn(true);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
   };
 
-  const handleLogin = (provider: "google" | "apple") => {
-    // Placeholder for login implementation
-    console.log(`Login with ${provider}`);
+  const handleLogin = async (provider: "google" | "apple") => {
+    if (provider === "google") {
+      try {
+        setLoading(true);
+        const userData = await signInWithGoogle();
+        setUser(userData);
+      } catch (error: any) {
+        Alert.alert("Error", error.message || "Failed to sign in");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Apple sign-in placeholder
+      Alert.alert("Coming Soon", "Apple sign-in will be available soon.");
+    }
   };
 
   return (
@@ -82,24 +83,49 @@ export default function AccountSetup() {
         <Text style={styles.text}>
           {!showingQuestions
             ? "Victor Hugo's Story"
-            : `Question ${questionIndex + 1}/4`}
+            : !showSignIn
+            ? `Question ${questionIndex + 1}/4`
+            : ""}
         </Text>
         <View style={styles.storyContainer}>
-          <Text style={styles.revealText}>
-            {!showingQuestions
-              ? texts[storyIndex]
-              : questions[questionIndex]?.text}
-          </Text>
+          <Text style={styles.revealText}>{displayedText}</Text>
           {!showingQuestions ? (
             <TouchableOpacity
-              style={styles.circleButton}
+              style={[styles.circleButton, isTyping && styles.disabledButton]}
               onPress={handleStoryNext}
+              disabled={isTyping}
             >
-              <Text style={styles.buttonText}>
+              <Text
+                style={[
+                  styles.buttonText,
+                  isTyping && styles.disabledButtonText,
+                ]}
+              >
                 {storyIndex === 0 ? "Start" : "Next"}
               </Text>
             </TouchableOpacity>
-          ) : questionIndex < questions.length ? (
+          ) : showSignIn ? (
+            <View style={styles.signInContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.signInButton,
+                  isLoading && styles.disabledSignInButton,
+                ]}
+                onPress={() => handleLogin("google")}
+                disabled={isLoading}
+              >
+                <Text style={styles.signInButtonText}>
+                  {isLoading ? "Signing in..." : "Sign in with Google"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.signInButton}
+                onPress={() => handleLogin("apple")}
+              >
+                <Text style={styles.signInButtonText}>Sign in with Apple</Text>
+              </TouchableOpacity>
+            </View>
+          ) : questionIndex < QUESTIONS.length ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.answerButton}
@@ -117,32 +143,6 @@ export default function AccountSetup() {
           ) : null}
         </View>
       </View>
-      <Modal
-        visible={showLoginModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {}}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Choose Sign In Method</Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => handleLogin("google")}
-              >
-                <Text style={styles.loginButtonText}>Sign in with Google</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => handleLogin("apple")}
-              >
-                <Text style={styles.loginButtonText}>Sign in with Apple</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </ImageBackground>
   );
 }
@@ -208,6 +208,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  disabledButton: {
+    backgroundColor: "#ccc",
+    opacity: 0.6,
+  },
+  disabledButtonText: {
+    color: "#888",
+  },
   answerButtonText: {
     color: "white",
     fontSize: 18,
@@ -217,46 +224,33 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
-    textAlign: "center",
+    textAlign: "left",
+    width: screenWidth * 0.9,
+    minHeight: 120,
     marginTop: 8,
   },
-  modalContainer: {
+  signInContainer: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-  },
-  modalContent: {
-    backgroundColor: "#1a1a1a",
-    borderRadius: 20,
-    padding: 30,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "white",
-    width: "80%",
-  },
-  modalTitle: {
-    color: "white",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 30,
-  },
-  modalButtons: {
-    width: "100%",
     gap: 20,
+    marginTop: 100,
+    width: "100%",
   },
-  loginButton: {
-    backgroundColor: "transparent",
+  signInButton: {
+    paddingHorizontal: 40,
     paddingVertical: 15,
     borderRadius: 25,
-    width: "100%",
+    minWidth: 200,
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "white",
+    backgroundColor: "#fff",
   },
-  loginButtonText: {
-    color: "white",
-    fontSize: 18,
+  disabledSignInButton: {
+    backgroundColor: "#ccc",
+    opacity: 0.6,
+  },
+  signInButtonText: {
+    color: "#222",
+    fontSize: 16,
     fontWeight: "bold",
   },
 });
