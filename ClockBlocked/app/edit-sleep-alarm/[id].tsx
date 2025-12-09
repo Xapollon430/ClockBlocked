@@ -155,6 +155,8 @@ export default function EditSleepAlarmScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Set Time</Text>
           <View style={styles.pickerWrapper}>
+            {/* Selection Highlight Bar */}
+            <View style={styles.highlightBar} />
             <TimerPicker
               initialValue={{
                 hours: alarm.hours,
@@ -239,9 +241,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  highlightBar: {
+    position: "absolute",
+    top: "50%",
+    height: 50,
+    width: "100%",
+    backgroundColor: "#3A3A3C",
+    borderRadius: 10,
+    marginTop: -15, // Half of height to center
   },
   alarm: {
-    backgroundColor: "#1C1C1E",
+    backgroundColor: "transparent", // Transparent so highlight bar shows through
     text: {
       color: "white",
     },

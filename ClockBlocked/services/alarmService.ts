@@ -135,6 +135,21 @@ export const getUserAlarms = async (userId: string): Promise<Alarm[]> => {
 };
 
 /**
+ * Delete all alarms for a specific user
+ * Used during account deletion
+ */
+export const deleteUserAlarms = async (userId: string): Promise<void> => {
+  try {
+    const alarms = await getUserAlarms(userId);
+    const deletePromises = alarms.map((alarm) => deleteAlarm(alarm.id));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error("Error deleting user alarms:", error);
+    throw error;
+  }
+};
+
+/**
  * Delete an alarm by ID
  */
 export const deleteAlarm = async (alarmId: string): Promise<void> => {

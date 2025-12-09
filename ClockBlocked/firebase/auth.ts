@@ -27,7 +27,9 @@ export const configureGoogleSignIn = () => {
   });
 };
 
-export const signInWithGoogle = async (): Promise<User> => {
+export const signInWithGoogle = async (
+  answers?: Record<string, string>
+): Promise<User> => {
   try {
     // Check if your device supports Google Play Services
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -67,6 +69,7 @@ export const signInWithGoogle = async (): Promise<User> => {
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
         createdAt: serverTimestamp(),
+        answers: answers || {},
       });
     }
 

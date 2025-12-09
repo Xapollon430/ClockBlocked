@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { View } from "react-native";
 import { useStore } from "@/store/useStore";
 import { useFocusEffect } from "expo-router";
@@ -17,15 +17,18 @@ import {
   Alarm,
 } from "@/services/alarmService";
 import { AlarmCard } from "@/components/AlarmCard";
+import { InfoModal } from "@/components/InfoModal";
 import { useAlarmNotifications } from "@/hooks/useAlarmNotifications";
 import {
   scheduleAlarmNotifications,
   cancelAlarmNotifications,
 } from "@/services/notificationService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AlarmsScreen() {
   const [alarms, setAlarms] = useState<Alarm[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showInfoModal, setShowInfoModal] = useState(true);
   const { user } = useStore();
 
   // Initialize notification listeners
@@ -82,19 +85,17 @@ export default function AlarmsScreen() {
     <AlarmCard alarm={item} onToggle={handleToggleAlarm} />
   );
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
+  const renderContent = () => {
+    if (loading) {
+      return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#007AFF" />
         </View>
-      </SafeAreaView>
-    );
-  }
+      );
+    }
 
-  if (alarms.length === 0) {
-    return (
-      <SafeAreaView style={styles.container}>
+    if (alarms.length === 0) {
+      return (
         <View style={styles.emptyContainer}>
           <IconSymbol name="alarm" size={64} color="#666" />
           <Text style={styles.emptyText}>No alarms yet</Text>
@@ -102,18 +103,27 @@ export default function AlarmsScreen() {
             Tap the + button to create your first alarm
           </Text>
         </View>
-      </SafeAreaView>
-    );
-  }
+      );
+    }
 
-  return (
-    <SafeAreaView style={styles.container}>
+    return (
       <FlatList
         data={alarms}
         renderItem={renderAlarmItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+      />
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {renderContent()}
+
+      <InfoModal
+        visible={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
       />
     </SafeAreaView>
   );

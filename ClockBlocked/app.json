@@ -14,7 +14,8 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["audio"],
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to allow you to upload picture."
       }
     },
     "android": {

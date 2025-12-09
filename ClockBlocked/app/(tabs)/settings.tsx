@@ -7,12 +7,15 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import { getAuth, deleteUser } from "@react-native-firebase/auth";
+import { getFirestore, doc, deleteDoc } from "@react-native-firebase/firestore";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
+import { deleteUserAlarms } from "@/services/alarmService";
 
 export default function SettingsScreen() {
-  const { logout, user } = useStore();
+  const { logout, user, reset } = useStore();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -42,12 +45,43 @@ export default function SettingsScreen() {
         {
           text: "Delete",
           style: "destructive",
-          onPress: () => {
-            // TODO: Implement account deletion
-            Alert.alert(
-              "Coming Soon",
-              "Account deletion will be available soon."
-            );
+          onPress: async () => {
+            try {
+              const auth = getAuth();
+              const currentUser = auth.currentUser;
+
+              if (!currentUser) {
+                Alert.alert("Error", "User not found");
+                return;
+              }
+
+              // 1. Delete all user alarms and cancel notifications
+              await deleteUserAlarms(currentUser.uid);
+
+              // 2. Delete user document from Firestore users collection
+              const db = getFirestore();
+              await deleteDoc(doc(db, "users", currentUser.uid));
+
+              // 3. Delete user account from Firebase Auth
+              await deleteUser(currentUser);
+
+              // 4. Reset local store (don't call logout() as user is already gone)
+              reset();
+              router.replace("/account-setup");
+            } catch (error: any) {
+              console.error("Error deleting account:", error);
+              if (error.code === "auth/requires-recent-login") {
+                Alert.alert(
+                  "Security Check",
+                  "Please log out and log in again to delete your account."
+                );
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Failed to delete account. Please try again."
+                );
+              }
+            }
           },
         },
       ]

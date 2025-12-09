@@ -10,7 +10,7 @@
  *
  * MODAL STATE PROTECTION:
  * - Checks if modal already active before opening (prevents phrase changes mid-challenge)
- * - Phrase generated locally on first trigger only
+ * - Phrase generated locally on first trigger only=
  * - All repeat notifications reference same pending challenge ID
  */
 
@@ -181,10 +181,7 @@ export const useAlarmNotifications = (): AlarmNotificationState => {
     initializeAlarms();
 
     // Helper function to handle notification logic
-    const handleNotificationAction = async (
-      alarmId: string,
-      shouldPlaySound: boolean
-    ) => {
+    const handleNotificationAction = async (alarmId: string) => {
       if (alarmId && user?.uid) {
         try {
           // Log alarm as pending (or get existing pending challenge ID)
@@ -195,13 +192,9 @@ export const useAlarmNotifications = (): AlarmNotificationState => {
             const phrase = getRandomMotivationalPhrase();
             setActiveAlarm(alarmId, phrase, sentOutId);
 
-            if (shouldPlaySound) {
-              // Start playing alarm sound only for foreground notifications
-              await playAlarmSound();
-            } else {
-              // If user tapped notification, ensure any existing sound stops
-              await stopAlarmSound();
-            }
+            // ALWAYS start playing alarm sound when modal opens
+            // This ensures looping audio whether from foreground or background tap
+            await playAlarmSound();
           }
         } catch (error) {
           console.error("Error handling notification action:", error);
@@ -214,7 +207,7 @@ export const useAlarmNotifications = (): AlarmNotificationState => {
       if (response) {
         const alarmId = response.notification.request.content.data
           ?.alarmId as string;
-        handleNotificationAction(alarmId, false); // Don't play sound on launch
+        handleNotificationAction(alarmId);
       }
     });
 
@@ -222,7 +215,7 @@ export const useAlarmNotifications = (): AlarmNotificationState => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener(async (notification) => {
         const alarmId = notification.request.content.data?.alarmId as string;
-        handleNotificationAction(alarmId, true); // Play sound for foreground
+        handleNotificationAction(alarmId);
       });
 
     // Listen for notification interactions (taps)
@@ -231,7 +224,7 @@ export const useAlarmNotifications = (): AlarmNotificationState => {
         async (response) => {
           const alarmId = response.notification.request.content.data
             ?.alarmId as string;
-          handleNotificationAction(alarmId, false); // Don't play sound on tap
+          handleNotificationAction(alarmId);
         }
       );
 

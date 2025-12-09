@@ -46,7 +46,12 @@ export default function RootLayout() {
         if (pendingChallenge && pendingChallenge.id) {
           // Restore the modal with a new random phrase (phrase not stored in DB)
           const phrase = getRandomMotivationalPhrase();
-          setActiveAlarm(pendingChallenge.alarmId, phrase, pendingChallenge.id);
+          setActiveAlarm(
+            pendingChallenge.alarmId,
+            phrase,
+            pendingChallenge.id,
+            pendingChallenge.sentAt
+          );
         }
       }
     };

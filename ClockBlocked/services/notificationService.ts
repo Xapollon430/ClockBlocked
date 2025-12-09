@@ -2,9 +2,9 @@ import * as Notifications from "expo-notifications";
 import { Alarm } from "./alarmService";
 
 // Number of repeat notifications per alarm (in case user doesn't wake up)
-const NOTIFICATION_REPEATS = 5;
+const NOTIFICATION_REPEATS = 10;
 // Interval between repeat notifications (in seconds)
-const REPEAT_INTERVAL_SECONDS = 18;
+const REPEAT_INTERVAL_SECONDS = 17.5;
 
 /**
  * Generate a deterministic notification identifier for an alarm
@@ -82,7 +82,7 @@ export const scheduleAlarmNotifications = async (
           title: "ClockBlocked Alarm",
           body:
             i === 0
-              ? "Wake Up Or Lose Money!"
+              ? "Wake Up And Conquer Constantinople!"
               : `Still sleeping? Wake up! (${i + 1}/${NOTIFICATION_REPEATS})`,
           sound: "alarm.wav",
           data: { type: "alarm", alarmId: alarm.id, repeatIndex: i },

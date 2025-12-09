@@ -61,6 +61,8 @@
     </dict>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow ClockBlocked to access the microphone for alarm verification</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs access to your photo library to allow you to upload a profile picture.</string>
     <key>NSSpeechRecognitionUsageDescription</key>
     <string>Allow ClockBlocked to recognize your voice for alarm verification</string>
     <key>NSUserActivityTypes</key>

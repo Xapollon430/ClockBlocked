@@ -1,29 +1,29 @@
 export const STORY_TEXTS = [
   "",
-  // // Step 1: Hugo's Problem
-  // "In 1830, Victor Hugo was hopelessly behind on his novel. Deadlines loomed, but he kept procrastinating.",
-  // // Step 2: The Commitment Device
-  // "Desperate, Hugo instructed his servant to lock him in a freezing cold room with no clothes. No way out—if he didn't write, he stayed trapped in the bitter cold.",
-  // // Step 3: The Result & Bridge to Product
-  // "With real consequences, Hugo finished The Hunchback of Notre Dame ahead of schedule. ClockBlocked brings that same power to your life. Ready to commit?",
+  // Step 1: Hugo's Problem
+  "In 1830, Victor Hugo was hopelessly behind on his novel. Deadlines loomed, but he kept procrastinating.",
+  // Step 2: The Commitment Device
+  "Desperate, Hugo instructed his servant to lock him in a freezing cold room with no clothes. No way out—if he didn't write, he stayed trapped in the bitter cold.",
+  // Step 3: The Result & Bridge to Product
+  "With real consequences, Hugo finished The Hunchback of Notre Dame ahead of schedule. ClockBlocked brings the same commitment device to your life.",
+  "Set your wake-up time. You have 15 minutes to prove you're up. Fail to check in, and you pay the price—literally. Your money goes straight to a cause you despise.",
 ];
 
 export const QUESTIONS = [
   {
-    text: "Are you a dog person?",
-    id: "pets",
+    text: "What is your stance on abortion?",
+    id: "abortion",
+    options: ["👶 Pro-Life", "⚖️ Pro-Choice"],
   },
   {
-    text: "Do you prefer summer over winter?",
-    id: "seasons",
+    text: "What is your stance on gun ownership?",
+    id: "guns",
+    options: ["🔫 Pro-2A", "🚫 Anti-2A"],
   },
   {
-    text: "Are you a morning person?",
-    id: "morning",
-  },
-  {
-    text: "Do you prefer coffee over tea?",
-    id: "drinks",
+    text: "Who do you support in the Middle East?",
+    id: "geopolitics",
+    options: ["🇮🇱 Israel", "🇵🇸 Palestine"],
   },
 ];
 

@@ -42,8 +42,8 @@ export default function AccountSetup() {
     }
   };
 
-  const handleAnswer = (answer: boolean) => {
-    setAnswers((prev: Record<string, boolean>) => ({
+  const handleAnswer = (answer: string) => {
+    setAnswers((prev: Record<string, string>) => ({
       ...prev,
       [QUESTIONS[questionIndex].id]: answer,
     }));
@@ -59,7 +59,7 @@ export default function AccountSetup() {
     if (provider === "google") {
       try {
         setLoading(true);
-        const userData = await signInWithGoogle();
+        const userData = await signInWithGoogle(answers);
         setUser(userData);
       } catch (error: any) {
         Alert.alert("Error", error.message || "Failed to sign in");
@@ -118,26 +118,34 @@ export default function AccountSetup() {
                   {isLoading ? "Signing in..." : "Sign in with Google"}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.signInButton}
                 onPress={() => handleLogin("apple")}
               >
                 <Text style={styles.signInButtonText}>Sign in with Apple</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           ) : questionIndex < QUESTIONS.length ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.answerButton}
-                onPress={() => handleAnswer(true)}
+                onPress={() =>
+                  handleAnswer(QUESTIONS[questionIndex].options[0])
+                }
               >
-                <Text style={styles.answerButtonText}>Yes</Text>
+                <Text style={styles.answerButtonText}>
+                  {QUESTIONS[questionIndex].options[0]}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.answerButton}
-                onPress={() => handleAnswer(false)}
+                onPress={() =>
+                  handleAnswer(QUESTIONS[questionIndex].options[1])
+                }
               >
-                <Text style={styles.answerButtonText}>No</Text>
+                <Text style={styles.answerButtonText}>
+                  {QUESTIONS[questionIndex].options[1]}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : null}
@@ -195,13 +203,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   answerButton: {
-    paddingHorizontal: 40,
     paddingVertical: 15,
-    borderRadius: 25,
-    minWidth: 120,
+    borderRadius: 30,
+    width: 160, // Fixed width for consistent size
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "white",
+    justifyContent: "center",
+    backgroundColor: "white", // White background to pop out
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonText: {
     color: "#222",
@@ -216,9 +228,10 @@ const styles = StyleSheet.create({
     color: "#888",
   },
   answerButtonText: {
-    color: "white",
+    color: "black", // Dark text for contrast against white background
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
   revealText: {
     color: "white",

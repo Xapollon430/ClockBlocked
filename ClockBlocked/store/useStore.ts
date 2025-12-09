@@ -14,7 +14,12 @@ type AuthState = {
   activeAlarmPhrase: string | null;
   alarmStartTime: Date | null;
   sentOutId: string | null; // ID of the alarms_sent_out document
-  setActiveAlarm: (alarmId: string, phrase: string, sentOutId: string) => void;
+  setActiveAlarm: (
+    alarmId: string,
+    phrase: string,
+    sentOutId: string,
+    startTime?: Date
+  ) => void;
   clearActiveAlarm: () => void;
 };
 
@@ -63,11 +68,16 @@ export const useStore = create<AuthState>((set, get) => ({
       sentOutId: null,
     }),
 
-  setActiveAlarm: (alarmId: string, phrase: string, sentOutId: string) =>
+  setActiveAlarm: (
+    alarmId: string,
+    phrase: string,
+    sentOutId: string,
+    startTime?: Date
+  ) =>
     set({
       activeAlarmId: alarmId,
       activeAlarmPhrase: phrase,
-      alarmStartTime: new Date(),
+      alarmStartTime: startTime || new Date(),
       sentOutId,
     }),
 
