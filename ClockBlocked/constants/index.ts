@@ -21,9 +21,9 @@ export const QUESTIONS = [
     options: ["🔫 Pro-2A", "🚫 Anti-2A"],
   },
   {
-    text: "Who do you support in the Middle East?",
-    id: "geopolitics",
-    options: ["🇮🇱 Israel", "🇵🇸 Palestine"],
+    text: "What is your stance on police reform?",
+    id: "police",
+    options: ["🚔 Back the Blue", "✊🏿 Defund the Police"],
   },
 ];
 
