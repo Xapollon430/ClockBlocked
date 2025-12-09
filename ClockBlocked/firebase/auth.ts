@@ -1,9 +1,9 @@
 import {
   getAuth,
   onAuthStateChanged,
-  signOut as firebaseSignOut,
   GoogleAuthProvider,
   signInWithCredential,
+  signInAnonymously,
 } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import {
@@ -80,13 +80,34 @@ export const signInWithGoogle = async (
   }
 };
 
-export const signOut = async (): Promise<void> => {
+export const signInAnonymouslyUser = async (
+  answers?: Record<string, string>
+): Promise<User> => {
   try {
-    await GoogleSignin.signOut();
     const auth = getAuth();
-    await firebaseSignOut(auth);
+    const userCredential = await signInAnonymously(auth);
+    const user = userCredential.user;
+
+    const userData = {
+      uid: user.uid,
+      email: null,
+    };
+
+    // Create user document in Firestore if it doesn't exist
+    const db = getFirestore();
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, "users", user.uid), {
+        isAnonymous: true,
+        createdAt: serverTimestamp(),
+        answers: answers || {},
+      });
+    }
+
+    return userData;
   } catch (error: any) {
-    console.error("Sign Out Error:", error);
-    throw new Error(error.message || "Failed to sign out");
+    console.error("Anonymous Sign-In Error:", error);
+    throw new Error(error.message || "Failed to sign in anonymously");
   }
 };

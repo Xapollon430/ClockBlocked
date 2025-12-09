@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { useTypewriter } from "../../hooks/useTypewriter";
 import { STORY_TEXTS, QUESTIONS } from "../../constants";
 import { useStore } from "../../store/useStore";
-import { signInWithGoogle } from "../../firebase/auth";
+import { signInAnonymouslyUser } from "../../firebase/auth";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -55,20 +55,15 @@ export default function AccountSetup() {
     }
   };
 
-  const handleLogin = async (provider: "google" | "apple") => {
-    if (provider === "google") {
-      try {
-        setLoading(true);
-        const userData = await signInWithGoogle(answers);
-        setUser(userData);
-      } catch (error: any) {
-        Alert.alert("Error", error.message || "Failed to sign in");
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      // Apple sign-in placeholder
-      Alert.alert("Coming Soon", "Apple sign-in will be available soon.");
+  const handleEnterApp = async () => {
+    try {
+      setLoading(true);
+      const userData = await signInAnonymouslyUser(answers);
+      setUser(userData);
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "Failed to enter app");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,19 +106,13 @@ export default function AccountSetup() {
                   styles.signInButton,
                   isLoading && styles.disabledSignInButton,
                 ]}
-                onPress={() => handleLogin("google")}
+                onPress={handleEnterApp}
                 disabled={isLoading}
               >
                 <Text style={styles.signInButtonText}>
-                  {isLoading ? "Signing in..." : "Sign in with Google"}
+                  {isLoading ? "Entering..." : "Ready To Commit?"}
                 </Text>
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                style={styles.signInButton}
-                onPress={() => handleLogin("apple")}
-              >
-                <Text style={styles.signInButtonText}>Sign in with Apple</Text>
-              </TouchableOpacity> */}
             </View>
           ) : questionIndex < QUESTIONS.length ? (
             <View style={styles.buttonContainer}>

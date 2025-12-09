@@ -15,26 +15,8 @@ import { useRouter } from "expo-router";
 import { deleteUserAlarms } from "@/services/alarmService";
 
 export default function SettingsScreen() {
-  const { logout, user, reset } = useStore();
+  const { user, reset } = useStore();
   const router = useRouter();
-
-  const handleLogout = async () => {
-    Alert.alert("Log Out", "Are you sure you want to log out?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Log Out",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await logout();
-            router.replace("/account-setup");
-          } catch (error) {
-            Alert.alert("Error", "Failed to log out. Please try again.");
-          }
-        },
-      },
-    ]);
-  };
 
   const handleDeleteAccount = () => {
     Alert.alert(
@@ -104,20 +86,6 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
-          {/* User Info Section */}
-          {user && (
-            <View style={styles.userSection}>
-              <View style={styles.avatarContainer}>
-                <IconSymbol
-                  name="person.circle.fill"
-                  size={60}
-                  color="#007AFF"
-                />
-              </View>
-              <Text style={styles.userEmail}>{user.email}</Text>
-            </View>
-          )}
-
           {/* Settings Sections */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>GENERAL</Text>
@@ -149,18 +117,6 @@ export default function SettingsScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>ACCOUNT</Text>
 
-            <TouchableOpacity style={styles.settingItem} onPress={handleLogout}>
-              <View style={styles.settingLeft}>
-                <IconSymbol
-                  name="arrow.right.square"
-                  size={24}
-                  color="#FF9500"
-                />
-                <Text style={styles.settingText}>Log Out</Text>
-              </View>
-              <IconSymbol name="chevron.right" size={20} color="#666" />
-            </TouchableOpacity>
-
             <TouchableOpacity
               style={[styles.settingItem, styles.dangerItem]}
               onPress={handleDeleteAccount}
@@ -187,22 +143,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  userSection: {
-    alignItems: "center",
-
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#1C1C1E",
-  },
-  avatarContainer: {
-    marginBottom: 12,
-  },
-  userEmail: {
-    fontSize: 16,
-    color: "#FFF",
-    fontWeight: "500",
   },
   section: {
     marginTop: 32,

@@ -7,7 +7,6 @@ type AuthState = {
   isLoading: boolean;
   setLoading: (loading: boolean) => void;
   setUser: (user: User | null) => void;
-  logout: () => Promise<void>;
   reset: () => void;
   // Alarm verification modal state
   activeAlarmId: string | null;
@@ -39,23 +38,6 @@ export const useStore = create<AuthState>((set, get) => ({
       user,
       isLoggedIn: !!user,
     }),
-
-  logout: async () => {
-    try {
-      set({ isLoading: true });
-
-      await signOut();
-      set({
-        user: null,
-        isLoggedIn: false,
-      });
-    } catch (err: any) {
-      set({ isLoading: false });
-      throw err;
-    } finally {
-      set({ isLoading: false });
-    }
-  },
 
   reset: () =>
     set({
