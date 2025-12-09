@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ClockBlocked - Beat Procrastination, One Morning at a Time</title>
+    <title>ClockBlocked - Wake Up or Pay the Price</title>
     <style>
       * {
         margin: 0;
@@ -12,9 +12,10 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #333;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        background-color: #000000;
+        color: #ffffff;
         min-height: 100vh;
         overflow-x: hidden;
       }
@@ -26,14 +27,14 @@
       }
 
       header {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        background: rgba(28, 28, 30, 0.8);
+        backdrop-filter: blur(20px);
         padding: 20px 0;
         position: fixed;
         width: 100%;
         top: 0;
         z-index: 1000;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .header-content {
@@ -43,188 +44,207 @@
       }
 
       .logo {
-        font-size: 1.8rem;
-        font-weight: bold;
+        font-size: 1.5rem;
+        font-weight: 700;
         color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        letter-spacing: -0.5px;
       }
 
       .cta-button {
-        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-        color: white;
-        padding: 12px 30px;
+        background: #ffffff;
+        color: #000000;
+        padding: 10px 24px;
         border: none;
-        border-radius: 25px;
-        font-size: 1rem;
+        border-radius: 999px;
+        font-size: 0.95rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         text-decoration: none;
         display: inline-block;
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
       }
 
       .cta-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        transform: scale(1.02);
+        opacity: 0.9;
       }
 
       .hero {
-        padding: 120px 0 80px;
+        padding: 160px 0 100px;
         text-align: center;
-        color: white;
+        background: radial-gradient(circle at center, #1c1c1e 0%, #000000 100%);
       }
 
       .hero h1 {
-        font-size: 3.5rem;
-        margin-bottom: 20px;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-        animation: fadeInUp 1s ease-out;
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 24px;
+        letter-spacing: -1px;
+        line-height: 1.1;
+        background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInUp 0.8s ease-out;
       }
 
       .hero p {
-        font-size: 1.3rem;
-        margin-bottom: 40px;
-        opacity: 0.9;
-        animation: fadeInUp 1s ease-out 0.2s both;
+        font-size: 1.5rem;
+        color: #8e8e93;
+        margin-bottom: 48px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.4;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
       }
 
       .main-section {
-        background: white;
+        background: #000000;
         padding: 80px 0;
         position: relative;
-        overflow: hidden;
-      }
-
-      .main-section::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 100px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
       }
 
       .content-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 60px;
+        gap: 80px;
         align-items: center;
         margin-top: 40px;
       }
 
       .story-section {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        background: #1c1c1e;
         padding: 40px;
-        border-radius: 20px;
-        border-left: 5px solid #667eea;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .story-section h2 {
-        color: #667eea;
+        color: #fff;
         font-size: 2rem;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        margin-bottom: 24px;
+        font-weight: 700;
       }
 
       .story-section p {
-        line-height: 1.6;
-        color: #555;
-        margin-bottom: 15px;
+        line-height: 1.7;
+        color: #aeaeb2;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+      }
+
+      .story-section strong {
+        color: #fff;
       }
 
       .highlight {
-        background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+        color: #ff3b30;
+        background: rgba(255, 59, 48, 0.1);
         padding: 2px 6px;
         border-radius: 4px;
         font-weight: 600;
       }
 
       .app-section {
-        background: white;
         padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       }
 
       .app-section h2 {
-        color: #333;
-        font-size: 2rem;
-        margin-bottom: 20px;
+        color: #fff;
+        font-size: 2.5rem;
+        margin-bottom: 24px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
       }
 
       .features {
         list-style: none;
-        margin-top: 30px;
+        margin-top: 40px;
       }
 
       .features li {
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
-        align-items: center;
-        gap: 15px;
+        align-items: flex-start;
+        gap: 20px;
       }
 
       .features li:last-child {
         border-bottom: none;
       }
 
+      .features h3 {
+        color: #fff;
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+
+      .features p {
+        color: #8e8e93;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
       .feature-icon {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        background: #2c2c2e;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        flex-shrink: 0;
       }
 
       .phone-mockup {
         position: relative;
-        width: 250px;
-        height: 500px;
-        background: linear-gradient(45deg, #333, #555);
-        border-radius: 30px;
-        padding: 20px;
-        margin: 40px auto;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        width: 280px;
+        height: 580px;
+        background: #1c1c1e;
+        border-radius: 40px;
+        border: 8px solid #3a3a3c;
+        margin: 0 auto;
+        box-shadow: 0 0 0 2px #000, 0 30px 60px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
       }
 
       .phone-screen {
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 20px;
+        background: #000;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         color: white;
         text-align: center;
-        position: relative;
-        overflow: hidden;
+        padding: 20px;
       }
 
-      .phone-screen::before {
-        content: "⏰";
+      .time-display {
         font-size: 4rem;
+        font-weight: 200;
         margin-bottom: 20px;
-        animation: pulse 2s infinite;
+        color: #fff;
+      }
+
+      .snooze-btn {
+        background: #ff3b30;
+        color: white;
+        padding: 16px 32px;
+        border-radius: 16px;
+        font-weight: 600;
+        margin-top: 20px;
+        width: 100%;
+        border: none;
       }
 
       @keyframes fadeInUp {
         from {
           opacity: 0;
-          transform: translateY(30px);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -232,47 +252,59 @@
         }
       }
 
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.1);
-        }
-      }
-
-      .cta-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+      .footer {
+        background: #1c1c1e;
         padding: 60px 0;
-        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 80px;
       }
 
-      .cta-section h2 {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
       }
 
-      .cta-section p {
-        font-size: 1.2rem;
-        margin-bottom: 30px;
-        opacity: 0.9;
+      .footer-links a {
+        color: #8e8e93;
+        text-decoration: none;
+        margin-left: 24px;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: #fff;
+      }
+
+      .contact-email {
+        color: #8e8e93;
+        font-size: 0.9rem;
       }
 
       @media (max-width: 768px) {
         .content-grid {
           grid-template-columns: 1fr;
-          gap: 40px;
+          gap: 60px;
         }
 
         .hero h1 {
           font-size: 2.5rem;
         }
 
-        .phone-mockup {
-          width: 200px;
-          height: 400px;
+        .hero p {
+          font-size: 1.1rem;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .footer-links a {
+          margin: 0 12px;
         }
       }
     </style>
@@ -282,19 +314,21 @@
       <div class="container">
         <div class="header-content">
           <div class="logo">ClockBlocked</div>
-          <a href="#" class="cta-button">Download App</a>
+          <a href="#" class="cta-button">Download Beta</a>
         </div>
       </div>
     </header>
 
     <section class="hero">
       <div class="container">
-        <h1>Beat Procrastination, One Morning at a Time</h1>
+        <h1>Wake Up or Pay the Price</h1>
         <p>
-          The alarm clock that fights your future self's worst enemy: the snooze
-          button
+          The only alarm clock that punishes your wallet by donating to causes
+          you hate when you hit snooze.
         </p>
-        <a href="#" class="cta-button">Get Started</a>
+        <a href="https://testflight.apple.com/join/WVWZhr6V" class="cta-button"
+          >Join TestFlight Beta</a
+        >
       </div>
     </section>
 
@@ -316,101 +350,69 @@
                   In 1830, Victor Hugo faced an impossible deadline. Instead of
                   writing <em>The Hunchback of Notre Dame</em>, he
                   procrastinated for months. His desperate solution?
-                  <span class="highlight"
-                    >He had his servant sneak into his bedroom at night, steal
-                    all his clothes, and lock the door from the outside.</span
+                </p>
+                <p>
+                  <strong class="highlight"
+                    >He locked away all his clothes.</strong
                   >
                 </p>
                 <p>
-                  Hugo would wake up trapped in a room with only a bed and a
-                  desk—no clothes, no way out. The only way his servant would
-                  unlock the door and return his clothes was if he wrote 3,000
-                  words and slipped them under the door.
+                  He forced himself to stay in his room with nothing but a shawl
+                  until he finished his work.
                   <strong>He finished his masterpiece two weeks early.</strong>
                 </p>
               </div>
-              <div style="flex: 0 0 200px">
+              <div style="flex: 1; max-width: 200px">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Victor_Hugo_by_%C3%89tienne_Carjat_1876_-_full.jpg"
-                  alt="Victor Hugo portrait"
+                  alt="Victor Hugo"
                   style="
                     width: 100%;
                     border-radius: 10px;
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-                    filter: sepia(20%);
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
                   "
                 />
-                <p
-                  style="
-                    font-size: 0.8rem;
-                    color: #666;
-                    margin-top: 8px;
-                    text-align: center;
-                    font-style: italic;
-                  "
-                >
-                  Victor Hugo, master of commitment devices
-                </p>
               </div>
             </div>
             <p>
-              This brilliant "commitment device" transformed his procrastination
-              into productivity by making the wrong choice impossible, not just
-              harder.
+              We digitized this extreme accountability. Instead of locking away
+              your clothes, we hold your money hostage.
             </p>
           </div>
 
           <div class="app-section">
-            <h2>⚡ Your Modern Commitment Device</h2>
-            <p>
-              ClockBlocked brings Hugo's strategy to your morning routine. When
-              you hit snooze or sleep through your alarm, the app automatically
-              charges your credit card and
-              <strong>donates the money to charity</strong>.
-            </p>
-
-            <div class="phone-mockup">
-              <div class="phone-screen">
-                <div style="margin-top: 20px">
-                  <h3>6:00 AM</h3>
-                  <p style="font-size: 0.9rem; margin-top: 10px">
-                    Snooze = $5 to charity
-                  </p>
-                  <p style="font-size: 0.8rem; margin-top: 20px">
-                    Just like Hugo's locked clothes, make the wrong choice cost
-                    you something real.
-                  </p>
-                </div>
-              </div>
-            </div>
-
+            <h2>Motivation via spite.</h2>
             <ul class="features">
               <li>
-                <div class="feature-icon">💰</div>
+                <div class="feature-icon">💸</div>
                 <div>
-                  <strong>Financial Commitment</strong><br />
-                  Set your penalty amount - every snooze costs you
+                  <h3>Real Stakes</h3>
+                  <p>
+                    Set a penalty amount. Miss your alarm, and say goodbye to
+                    that cash.
+                  </p>
                 </div>
               </li>
               <li>
-                <div class="feature-icon">❤️</div>
+                <div class="feature-icon">😤</div>
                 <div>
-                  <strong>Charitable Impact</strong><br />
-                  Your procrastination funds causes you care about
+                  <h3>Anti-Charity</h3>
+                  <p>
+                    Your lost money doesn't just vanish. It goes to a cause you
+                    fundamentally oppose. Pro-life? Your money goes to Planned
+                    Parenthood. Anti-gun? Say hello to the NRA.
+                  </p>
                 </div>
               </li>
               <li>
-                <div class="feature-icon">📊</div>
+                <div class="feature-icon">🔒</div>
                 <div>
-                  <strong>Progress Tracking</strong><br />
-                  Watch your morning discipline improve over time
-                </div>
-              </li>
-              <li>
-                <div class="feature-icon">🔐</div>
-                <div>
-                  <strong>No Escape Routes</strong><br />
-                  Like Hugo's locked clothes, no easy way out
+                  <h3>No Cheating</h3>
+                  <p>
+                    Strict challenges required to turn off the alarm. No easy
+                    snoozing allowed.
+                  </p>
                 </div>
               </li>
             </ul>
@@ -419,14 +421,28 @@
       </div>
     </section>
 
-    <section class="cta-section">
+    <section class="footer">
       <div class="container">
-        <h2>Ready to Lock Away Your Snooze Button?</h2>
-        <p>
-          Join thousands who've transformed their mornings with the power of
-          commitment
-        </p>
-        <a href="#" class="cta-button">Download ClockBlocked</a>
+        <div class="footer-content">
+          <div class="contact-email">Contact: Xapollon430@gmail.com</div>
+          <div class="footer-links">
+            <a href="privacy_policy.html">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="https://testflight.apple.com/join/WVWZhr6V"
+              >Download Beta</a
+            >
+          </div>
+        </div>
+        <div
+          style="
+            text-align: center;
+            margin-top: 40px;
+            color: #3a3a3c;
+            font-size: 0.8rem;
+          "
+        >
+          © 2024 ClockBlocked. All rights reserved.
+        </div>
       </div>
     </section>
   </body>
